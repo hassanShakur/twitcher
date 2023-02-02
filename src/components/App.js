@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './Header';
+import GoogleAuth from './GoogleAuth';
 
 import StreamCreate from './streams/StreamCreate';
 import StreamDelete from './streams/StreamDelete';
@@ -12,6 +13,7 @@ function App() {
     <BrowserRouter>
       <div className='App'>
         <Header />
+        <GoogleAuth />
         <Routes>
           <Route path='/' exact element={<StreamList />} />
           <Route
