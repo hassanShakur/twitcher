@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 
 const GoogleAuth = () => {
-  const [user, setUser] = useState(null);
-  console.log(user);
+  const [user, setUser] = useState({});
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const handleCredentialResponse = ({ clientId, credential }) => {
     if (!credential || !clientId) return;
     const { name, email } = jwtDecode(credential);
     setUser({ userId: clientId, name, email });
+    setIsSignedIn(true);
+  };
+
+  const handleLogoutClick = () => {
+    setIsSignedIn(false);
+    setUser({});
   };
 
   useEffect(() => {
@@ -29,13 +35,20 @@ const GoogleAuth = () => {
       theme: 'filled-blue',
     });
   }, []);
+
+  const renderButton = () => {
+    return Object.keys(user).length > 0 ? (
+      <div id='logout-div'>
+        <button onClick={handleLogoutClick}>Logout</button>
+      </div>
+    ) : (
+      <div id='google-login-div'></div>
+    );
+    
+  };
   //   console.log(google.accounts);
 
-  return (
-    <div>
-      <div id='google-login-div'></div>
-    </div>
-  );
+  return <div className='auth-div'>{renderButton()}</div>;
 };
 
 export default GoogleAuth;
