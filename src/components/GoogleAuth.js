@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import jwtDecode from 'jwt-decode';
 
 const GoogleAuth = () => {
-  const handleCredentialResponse = (response) => {
-    console.log('hekk');
-    console.log(response);
+  const [user, setUser] = useState(null);
+  console.log(user);
+
+  const handleCredentialResponse = ({ clientId, credential }) => {
+    if (!credential || !clientId) return;
+    const { name, email } = jwtDecode(credential);
+    setUser({ userId: clientId, name, email });
   };
 
   useEffect(() => {
-    /*global google*/
-    const auth = google.accounts.id;
-    console.log(auth);
+    const auth = window.google?.accounts.id;
+    if (!auth) return;
 
     // Initialization
 
@@ -24,17 +28,8 @@ const GoogleAuth = () => {
     auth.renderButton(btnParent, {
       theme: 'filled-blue',
     });
-
-    // Login Prompt and notify on success
-    auth.prompt((notification) => {
-      if (
-        notification.isNotDisplayed() ||
-        notification.isSkippedMoment()
-      ) {
-        console.log('Notification failed!!!');
-      }
-    });
   }, []);
+  //   console.log(google.accounts);
 
   return (
     <div>
